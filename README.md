@@ -9,7 +9,7 @@ A **work-in-progress** Quake-style console for Godot. Requires a Godot 3.0.
 - Commands
 - Cvars
 - Scrolling
-- Toggleable console with fade animation (use <kbd>Shift+Escape</kbd> or <kbd>~</kbd> to toggle)
+- Toggleable console with fade animation (use <kbd>Shift+Escape</kbd> or <kbd>~</kbd> to toggle, needs custom actions in the tab "Project Settings/Input Map": console_toggle, console_up, console_down)
 - Easily extensible with new commands
 - Rich text format (colors, bold, italic, and more) using a RichTextLabel
 - Basic tab completion
