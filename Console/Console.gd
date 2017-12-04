@@ -4,6 +4,7 @@
 extends CanvasLayer
 const Argument = preload('Argument.gd')
 const BaseCommands = preload('BaseCommands.gd')
+onready var RegExLib = preload('Types/RegExLib.gd').new()
 
 
 ### Custom console types
@@ -76,11 +77,14 @@ func _input(event):
 	if Input.is_action_just_pressed("console_up"):
 		if (cmd_history_up > 0 and cmd_history_up <= cmd_history.size()):
 			cmd_history_up-=1
-			console_line.set_text(cmd_history[cmd_history_up])
+			set_linetext_by_code(cmd_history[cmd_history_up], true)
 	if Input.is_action_just_pressed("console_down"):
 		if (cmd_history_up > -1 and cmd_history_up + 1 < cmd_history.size()):
 			cmd_history_up +=1
-			console_line.set_text(cmd_history[cmd_history_up])
+			set_linetext_by_code(cmd_history[cmd_history_up], true)
+		elif (cmd_history_up > -1 and cmd_history_up + 1 == cmd_history.size()):
+			cmd_history_up +=1
+			set_linetext_by_code(entered_latters, true)
 
 	if is_tab_pressed:
 		is_tab_pressed = Input.is_key_pressed(KEY_TAB)
@@ -157,6 +161,14 @@ func is_console_opened():
 		else:
 			return 2
 	return 0
+
+func set_linetext_by_code(string, move_to_end = false):
+	text_changed_by_player = false
+	console_line.set_text(string)
+	text_changed_by_player = true
+	
+	if move_to_end:
+			console_line.set_cursor_position(console_line.text.length()+1)
 
 # Called when player change text
 func _on_LineEdit_text_changed(text):

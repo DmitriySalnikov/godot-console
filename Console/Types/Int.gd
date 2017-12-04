@@ -9,10 +9,7 @@ func _init():
 
 # @param  Varian  _value
 func check(_value):  # bool
-	var r = RegEx.new()
-	r.compile('^\\d+$')
-
-	rematch = r.search(_value)
+	rematch = Console.RegExLib.Int.search(_value)
 
 	if rematch and rematch is RegExMatch:
 		return OK
