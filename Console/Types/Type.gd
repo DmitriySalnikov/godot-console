@@ -19,7 +19,7 @@ var t setget _set_protected
 # @param  int  _type
 func _init(_type):
   if BASE_TYPES.has(str(_type)):
-    name = TYPES[str(_type)]
+    name = BASE_TYPES[str(_type)]
   t = _type
 
 

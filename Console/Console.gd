@@ -378,7 +378,7 @@ func handle_command(text):
 func echo(text):
 	# Erase "echo" from the output
 	#text.erase(0, 5)
-	append_bbcode("\n" + text + "\n")
+	append_bbcode(text + "\n")
 	print(text)
 
 # Lists all available commands
