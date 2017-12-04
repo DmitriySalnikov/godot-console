@@ -28,7 +28,7 @@ func _init(_name, _type, _default = null):
 
 
 # @param  Variant  _value
-func set_value(_value):	# int
+func set_value(_value):  # int
 	if type.check(_value):
 		value = type.get()
 		return OK
@@ -38,7 +38,7 @@ func set_value(_value):	# int
 
 # Should be ?static? or should be placed in another class...
 # @param  Array<Argument>  args
-static func to_string(args):	# string
+static func to_string(args):  # string
 	var result = ''
 
 	var argsSize = args.size()

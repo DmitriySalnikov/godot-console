@@ -8,7 +8,7 @@ func _init():
 
 
 # @param  Varian  _value
-func check(_value):	# bool
+func check(_value):  # bool
 	var r = RegEx.new()
 	r.compile('^[+-]?([0-9]*\\.?[0-9]+|[0-9]+\\.?[0-9]*)([eE][+-]?[0-9]+)?$')
 
@@ -20,7 +20,7 @@ func check(_value):	# bool
 	return false
 
 
-func get():	# float
+func get():  # float
 	if rematch and rematch is RegExMatch:
 		return float(rematch.get_string())
 

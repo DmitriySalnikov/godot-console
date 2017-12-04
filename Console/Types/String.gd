@@ -8,7 +8,7 @@ func _init():
 
 
 # @param  Varian  _value
-func check(_value):	# bool
+func check(_value):  # bool
 	var r = RegEx.new()
 	r.compile('^\\w+$')
 
@@ -20,7 +20,7 @@ func check(_value):	# bool
 	return false
 
 
-func get():	# string
+func get():  # string
 	if rematch and rematch is RegExMatch:
 		return str(rematch.get_string())
 

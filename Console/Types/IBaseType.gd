@@ -11,12 +11,12 @@ var rematch
 
 
 # @param  Varian  _value
-func check(_value):	# bool
+func check(_value):  # bool
 	pass
 
 
 # @param  Varian  _value
-func get():	# Variant
+func get():  # Variant
 	pass
 
 

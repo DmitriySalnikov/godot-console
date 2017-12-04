@@ -8,7 +8,7 @@ func _init():
 
 
 # @param  Varian  _value
-func check(_value):	# bool
+func check(_value):  # bool
 	var r = RegEx.new()
 	r.compile('^(1|0|true|false)$')
 
@@ -20,7 +20,7 @@ func check(_value):	# bool
 	return false
 
 
-func get():	# bool
+func get():  # bool
 	if rematch and rematch is RegExMatch:
 		var tmp = rematch.get_strings()[0]
 

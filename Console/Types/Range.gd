@@ -18,7 +18,7 @@ func _init(_min, _max):
 
 
 # @param  Varian  _value
-func check(_value):	# bool
+func check(_value):  # bool
 	var r = RegEx.new()
 	r.compile('^\\d+$')
 
@@ -30,7 +30,7 @@ func check(_value):	# bool
 	return false
 
 
-func get():	# string
+func get():  # string
 	if rematch and rematch is RegExMatch:
 		return clamp(int(rematch.get_string()), rmin, rmax)
 
