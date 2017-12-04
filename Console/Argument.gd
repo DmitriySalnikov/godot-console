@@ -3,19 +3,19 @@ extends Object
 const Types = preload('Types/Types.gd')
 
 
-# @var	string
+# @var  string
 var name
-# @var	Type
+# @var  Type
 var type setget _set_protected
-# @var	Variant
+# @var  Variant
 var value = null setget set_value
-# @var	Type.t
+# @var  Type.t
 var default
 
 
-# @param	string	_name
-# @param	int|Type	type
-# @param	Type.t	_default
+# @param  string  _name
+# @param  int|Type  type
+# @param  Type.t  _default
 func _init(_name, _type, _default = null):
 	name = _name
 
@@ -27,7 +27,7 @@ func _init(_name, _type, _default = null):
 	default = _default
 
 
-# @param	Variant	_value
+# @param  Variant  _value
 func set_value(_value):	# int
 	if type.check(_value):
 		value = type.get()
@@ -37,7 +37,7 @@ func set_value(_value):	# int
 
 
 # Should be ?static? or should be placed in another class...
-# @param	Array<Argument>	args
+# @param  Array<Argument>  args
 static func to_string(args):	# string
 	var result = ''
 

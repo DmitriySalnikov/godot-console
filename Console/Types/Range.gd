@@ -13,7 +13,7 @@ func _init(_min, _max):
 	rmax = _max
 
 
-# @param	Varian	_value
+# @param  Varian  _value
 func check(_value):	# bool
 	var r = RegEx.new()
 	r.compile('^\\d+$')

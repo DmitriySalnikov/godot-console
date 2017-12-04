@@ -7,7 +7,7 @@ func _init():
 	t = TYPE_INT
 
 
-# @param	Varian	_value
+# @param  Varian  _value
 func check(_value):	# bool
 	var r = RegEx.new()
 	r.compile('^\\d+$')

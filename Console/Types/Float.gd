@@ -2,18 +2,12 @@
 extends 'BaseType.gd'
 
 
-var _e
-
-
-# @param	int	e	how many numbers after the point to keep
-func _init(e = 2):
+func _init():
 	name = 'Float'
 	t = TYPE_REAL
 
-	_e = e
 
-
-# @param	Varian	_value
+# @param  Varian  _value
 func check(_value):	# bool
 	var r = RegEx.new()
 	r.compile('^[+-]?([0-9]*\\.?[0-9]+|[0-9]+\\.?[0-9]*)([eE][+-]?[0-9]+)?$')
