@@ -1,6 +1,7 @@
 
 extends Object
-const Type = preload('Types/Type.gd')
+const BaseType = preload('Types/BaseType.gd')
+const Types = preload('Types/Types.gd')
 
 
 # @var  string
@@ -19,26 +20,18 @@ var default
 func _init(_name, _type, _default = null):
   name = _name
 
-  # if _type is Type:
-  #   type = _type
-  # else:
-  type = Type.new(_type)
+  if typeof(_type) == TYPE_OBJECT:
+    type = _type
+  else:
+    type = Types.create(_type)
 
   default = _default
 
 
 # @param  Variant  _value
 func set_value(_value):  # int
-  if type.t == TYPE_STRING:
-    value = _value
-  elif type.t == TYPE_INT:
-    value = _value.to_int()
-  elif type.t == TYPE_REAL:
-    value = _value.to_float()
-  elif type.t == TYPE_BOOL:
-    value = false if _value == '0' or _value.to_lower() == 'false' else true
-
-  if value != null:
+  if type.check(_value):
+    value = type.get()
     return OK
 
   return FAILED

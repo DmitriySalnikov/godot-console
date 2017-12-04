@@ -3,14 +3,14 @@ extends 'BaseType.gd'
 
 
 func _init():
-  name = 'Int'
-  t = TYPE_INT
+  name = 'String'
+  t = TYPE_STRING
 
 
 # @param  Varian  _value
 func check(_value):  # bool
   var r = RegEx.new()
-  r.compile('^\\d+$')
+  r.compile('^\\w+$')
 
   rematch = r.search(_value)
 
@@ -20,8 +20,8 @@ func check(_value):  # bool
   return false
 
 
-func get():  # int
+func get():  # string
   if rematch and rematch is RegExMatch:
-    return int(rematch.get_string())
+    return str(rematch.get_string())
 
-  return 0
+  return ""
