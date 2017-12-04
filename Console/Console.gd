@@ -144,7 +144,6 @@ func complete():
 	if found_commands_list.size()>0 and prev_com == "":
 		prev_com = found_commands_list[0]
 	var idx = found_commands_list.find(prev_com)
-	print(idx, " ",prev_entered_latters," ", entered_latters," ", prev_com, " ", last_match)
 	if idx != -1:
 		idx += 1
 		if idx >= found_commands_list.size():

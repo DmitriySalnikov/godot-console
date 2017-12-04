@@ -23,7 +23,7 @@ func _ready():
 	
 	# Register custom cvar
 	Console.register_cvar("cb_checked", {
-		description = "The value of chack box",
+		description = "The value of check box",
 		type = TYPE_BOOL,
 		default_value = false,
 		target = self
