@@ -1,6 +1,7 @@
 
 extends Node
 const Range = preload('res://Console/Types/Range.gd')
+const WhiteList = preload('res://Console/Types/WhiteList.gd')
 
 
 var label_text setget set_label_text, get_label_text
@@ -43,6 +44,12 @@ func _ready():
 		target = self
 	})
 
+	Console.register_command("filter_method", {
+		description = "Filter with whitelist",
+		args = [["filter", WhiteList.new(['hello', 'world'])]],
+		target = self
+	})
+
 func set_label_text(text):
 	$ExampleLabel.text = text
 
@@ -72,3 +79,7 @@ func set_cb_checked(val):
 
 func get_cb_checked():
 	return $CheckBox.pressed
+
+
+func filter_method(filter):
+	print(filter)
