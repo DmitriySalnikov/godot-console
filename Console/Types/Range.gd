@@ -2,10 +2,14 @@
 extends 'BaseType.gd'
 
 
+# @var  int|float
 var rmin
+# @var  int|float
 var rmax
 
 
+# @param  int|float  _min
+# @param  int|float  _max
 func _init(_min, _max):
 	name = 'Int'
 	t = null
