@@ -1,7 +1,4 @@
-
 extends Node
-const Range = preload('res://Console/Types/Range.gd')
-
 
 var label_text setget set_label_text, get_label_text
 var pb_value setget set_pb_value, get_pb_value
@@ -26,7 +23,7 @@ func _ready():
 	# Register custom cvar
 	Console.register_cvar("pb_value", {
 		description = "The level of progress bar",
-		arg = ['value', Range.new(0, 100)],
+		arg = ['value', Console.Range.new(0, 100)],
 		target = self
 	})
 

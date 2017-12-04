@@ -5,6 +5,7 @@ extends CanvasLayer
 const Argument = preload('Argument.gd')
 const BaseCommands = preload('BaseCommands.gd')
 
+const Range = preload('Types/Range.gd')
 
 onready var console_box = $ConsoleBox
 onready var console_text = $ConsoleBox/ConsoleText

@@ -1,10 +1,6 @@
-
 extends Object
-const Range = preload('res://Console/Types/Range.gd')
-
 
 var client_max_fps = 61 setget set_client_max_fps
-
 
 func _init():
 	Console.register_command("echo", {
@@ -58,7 +54,7 @@ func _init():
 	# Register built-in cvars
 	Console.register_cvar("client_max_fps", {
 		description = "The maximal framerate at which the application can run",
-		arg = ['value', Range.new(10, 1000)],
+		arg = ['value', Console.Range.new(10, 1000)],
 		target = self
 	})
 

@@ -1,4 +1,3 @@
-
 extends Object
 const BaseType = preload('IBaseType.gd')
 
