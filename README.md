@@ -20,8 +20,7 @@ For command:
 ```gdscript
 register_command("command", { # Name of command
 	description = "", # Description of command
-	args = "", # Argument name
-	num_args = 0, # Arguments count(currently support only 1 argument)
+	args = [['arg_name', ARG_TYPE], ...], # Arguments
 	target = self # Target script to bind command
 })
 ```

@@ -2,6 +2,8 @@
 # Copyright (c) 2016 Hugo Locurcio and contributors - MIT license
 
 extends Node2D
+const Argument = preload('Argument.gd')
+
 
 onready var console_box = $ConsoleBox
 onready var console_text = $ConsoleBox/ConsoleText
@@ -26,6 +28,7 @@ var text_changed_by_player = true
 var found_commands_list = []
 var is_tab_pressed = false
 
+
 func _ready():
 	# Allow selecting console text
 	console_text.set_selection_enabled(true)
@@ -35,67 +38,68 @@ func _ready():
 	console_text.set_focus_mode(Control.FOCUS_NONE)
 
 	set_process_input(true)
-	
+
 	get_viewport().connect("size_changed", self, "_window_rect_changed")
 	animation_player.connect("animation_finished", self, "_on_AnimationPlayer_finished")
 	console_line.connect("text_changed", self, "_on_LineEdit_text_changed")
 	console_line.connect("text_entered", self, "_on_LineEdit_text_entered")
 	_window_rect_changed()
-	
+
 	animation_player.set_current_animation("fade")
 	# HIDE CONSOLE OM START ^_^
 	set_console_opened(true)
 	hide()
 	# By default we show help
-	append_bbcode("Welcome in Godot Engine debug console\nProject: " + ProjectSettings.get_setting("application/config/name") + "\nType [color=yellow]cmdlist[/color] to get a list of all commands avaliables\n[color=green]===[/color]\n")
+	append_bbcode("Welcome in Godot Engine ")
+	version(false)
+	append_bbcode(" console\nProject: " + ProjectSettings.get_setting("application/config/name") +  " \nType [color=yellow]cmdlist[/color] to get a list of all commands avaliables\n[color=green]===[/color]\n")
 
 	# Register built-in commands
 	register_command("echo", {
 		description = "Prints a string in console",
-		args = "<string>",
-		num_args = 1,
+		args = [['message', TYPE_STRING]],
 		target = self
 	})
 
 	register_command("history", {
 		description = "Print all previous cmd used during the session",
-		args = "",
-		num_args = 0,
+		args = [],
 		target = self
 	})
 
 	register_command("cmdlist", {
 		description = "Lists all available commands",
-		args = "",
-		num_args = 0,
+		args = [],
 		target = self
 	})
 
 	register_command("cvarlist", {
 		description = "Lists all available cvars",
-		args = "",
-		num_args = 0,
+		args = [],
 		target = self
 	})
 
 	register_command("help", {
 		description = "Outputs usage instructions",
-		args = "",
-		num_args = 0,
+		args = [],
 		target = self
 	})
 
 	register_command("quit", {
 		description = "Exits the application",
-		args = "",
-		num_args = 0,
+		args = [],
 		target = self
 	})
 
 	register_command("clear", {
 		description = "clear the terminal",
-		args = "",
-		num_args = 0,
+		args = [],
+		target = self
+	})
+
+	register_command("version", {
+		description = "clear the terminal",
+		args = [['show_full', TYPE_BOOL]],
 		target = self
 	})
 
@@ -129,7 +133,7 @@ func _input(event):
 		if (cmd_history_up > -1 and cmd_history_up + 1 < cmd_history.size()):
 			cmd_history_up +=1
 			console_line.set_text(cmd_history[cmd_history_up])
-	
+
 	if is_tab_pressed:
 		is_tab_pressed = Input.is_key_pressed(KEY_TAB)
 	if console_line.get_text() != "" and console_line.has_focus() and Input.is_key_pressed(KEY_TAB) and not is_tab_pressed:
@@ -139,7 +143,7 @@ func _input(event):
 func complete():
 	var text = entered_latters
 	var last_match = ""
-	
+
 	if prev_entered_latters != entered_latters or found_commands_list.empty():
 		found_commands_list = []
 		# If there are no matches found yet, try to complete for a command or cvar
@@ -153,7 +157,7 @@ func complete():
 				describe_cvar(cvar)
 				last_match = cvar
 				found_commands_list.append(cvar)
-	
+
 	if found_commands_list.size()>0 and prev_com == "":
 		prev_com = found_commands_list[0]
 	var idx = found_commands_list.find(prev_com)
@@ -164,7 +168,7 @@ func complete():
 		prev_com = found_commands_list[idx]
 	else:
 		prev_com = last_match
-	
+
 	if prev_com != "":
 		# text_changed_by_player needs for not changing other vals by signal "text_changed"
 		text_changed_by_player = false
@@ -232,8 +236,14 @@ func _on_LineEdit_text_entered(text):
 
 # Registers a new command
 func register_command(name, args):
-	if args.has("target") and args.target != null and args.has("description") and args.has("args") and args.has("num_args"):
+	if args.has("target") and args.target != null and args.has("description") and args.has("args"):
 		if args.target.has_method(name):
+			var argsl = []
+			for arg in args.args:
+				argsl.append(Argument.new(arg[0], arg[1]))
+
+			args.args = argsl
+
 			commands[name] = args
 		else:
 			print("Failed adding command ", name, ". The target has no this function!")
@@ -275,12 +285,14 @@ func clear():
 func describe_command(cmd):
 	var command = commands[cmd]
 	var description = command.description
-	var args = command.args
-	var num_args = command.num_args
-	if num_args >= 1:
-		append_bbcode("[color=#ffff66]" + cmd + ":[/color] " + description + " [color=#88ffff](usage: " + cmd + " " + args + ")[/color]\n")
-	else:
-		append_bbcode("[color=#ffff66]" + cmd + ":[/color] " + description + " [color=#88ffff](usage: " + cmd + ")[/color]\n")
+	var args = Argument.to_string(command.args)
+
+	append_bbcode("[color=#ffff66]" + cmd + "[/color]")
+
+	if command.args.size() >= 1:
+		append_bbcode(" [color=#88ffff]" + args + "[/color]")
+
+	append_bbcode(' - ' + description + "\n")
 
 # Describes a cvar, used by the "cvarlist" command and when the user enters a cvar name without any arguments
 func describe_cvar(cvar):
@@ -302,18 +314,28 @@ func handle_command(text):
 	# Check if the first word is a valid command
 	if commands.has(cmd[0]):
 		var command = commands[cmd[0]]
+
+		var args = []
+		var arg_status
+		for i in range(1, cmd.size()):
+			arg_status = command.args[i - 1].set_value(cmd[i])
+
+			if arg_status == OK:
+				args.append(command.args[i - 1].value)
+			else:
+				echo("Some error that sais that method param number " + str(i) + " has different type")
+				return
+
 		print("> " + text)
 		append_bbcode("[b]> " + text + "[/b]\n")
 		# Check target script argument
 		# If no argument is supplied, then show command description and usage, but only if command has at least 1 argument required
-		if cmd.size() == 1 and not command.num_args == 0:
+		if arg_status == FAILED:
 			describe_command(cmd[0])
 		else:
-			# Run the command! If there are no arguments, don't pass any to the other script.
-			if command.num_args == 0:
-				command.target.call(cmd[0])
-			else:
-				command.target.callv(cmd[0], [cmd[1]])
+			# Run the command!
+			command.target.callv(cmd[0], args)
+
 	# Check if the first word is a valid cvar
 	elif cvars.has(cmd[0]):
 		var cvar = cvars[cmd[0]]
@@ -356,7 +378,8 @@ func handle_command(text):
 func echo(text):
 	# Erase "echo" from the output
 	#text.erase(0, 5)
-	Console.append_bbcode("\n" + text + "\n")
+	append_bbcode("\n" + text + "\n")
+	print(text)
 
 # Lists all available commands
 func cmdlist():
@@ -381,3 +404,11 @@ Type [color=#ffff66]quit[/color] to exit the application."""
 
 func client_max_fps(value):
 	Engine.set_target_fps(int(value))
+
+
+func version(full = false):
+	var v = Engine.get_version_info()
+	if full:
+		append_bbcode(str(v))
+	else:
+		append_bbcode(str(v.major) + '.' + str(v.minor) + '.' + str(v.patch) + ' ' + v.status)
