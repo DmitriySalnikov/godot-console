@@ -255,20 +255,19 @@ func describe_cvar(cvar):
 func handle_command(text):
 	# The current console text, splitted by spaces (for arguments)
 	var cmd = text.split(" ", false)
+	var arg_status
 	# Check if the first word is a valid command
 	if commands.has(cmd[0]):
 		var command = commands[cmd[0]]
 
 		var args = []
-		var arg_status
 		for i in range(1, cmd.size()):
 			arg_status = command.args[i - 1].set_value(cmd[i])
 
 			if arg_status == OK:
 				args.append(command.args[i - 1].value)
-			else:
-				append_bbcode("[i][color=#ff8888]Some error that sais that method param number " + str(i) + " has different type[/color][/i]\n")
-				return
+			elif arg_status == FAILED:
+				append_bbcode("[color=#ff8888][ERROR][/color] Expected " + command.args[i - 1].type.name + " at position " + str(i) + "\n")
 
 		print("> " + text)
 		append_bbcode("[b]> " + text + "[/b]\n")
@@ -276,7 +275,7 @@ func handle_command(text):
 		# If no argument is supplied, then show command description and usage, but only if command has at least 1 argument required
 		if arg_status == FAILED:
 			describe_command(cmd[0])
-		else:
+		elif arg_status != Argument.ARGASSIG.CANCELED:
 			# Run the command!
 			command.target.callv(cmd[0], args)
 
@@ -290,10 +289,13 @@ func handle_command(text):
 		if cmd.size() == 1:
 			describe_cvar(cmd[0])
 		else:
-			cvar.arg.set_value(cmd[1])
+			arg_status = cvar.arg.set_value(cmd[1])
 
-			# Call setter code
-			cvar.target.set(cmd[0], cvar.arg.value)
+			if arg_status == FAILED:
+				append_bbcode("[color=#ff8888][ERROR][/color] Expected " + cvar.arg.type.name + "\n")
+			elif arg_status != Argument.ARGASSIG.CANCELED:
+				# Call setter code
+				cvar.target.set(cmd[0], cvar.arg.value)
 	else:
 		# Treat unknown commands as unknown
 		append_bbcode("[b]> " + text + "[/b]\n")
