@@ -15,9 +15,9 @@ func check(_value):  # bool
 	rematch = r.search(_value)
 
 	if rematch and rematch is RegExMatch:
-		return true
+		return OK
 
-	return false
+	return FAILED
 
 
 func get():  # int
