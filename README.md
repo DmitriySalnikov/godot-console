@@ -12,7 +12,7 @@ A **work-in-progress** Quake-style console for Godot. Requires a Godot 3.0.
 - Toggleable console with fade animation (use <kbd>Shift+Escape</kbd> or <kbd>~</kbd> to toggle)
 - Easily extensible with new commands
 - Rich text format (colors, bold, italic, and more) using a RichTextLabel
-- Basic tab completion
+- Enhance tab completion
 
 ## Examples
 
@@ -39,7 +39,6 @@ register_cvar("cvar", {
 
 ## TODO
 
-- Enhance tab completion
 - Sanitize int/float cvar values (based on existing min/max value data)
 - Navigating command history in the LineEdit
 

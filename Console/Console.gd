@@ -15,6 +15,14 @@ var cvars = {}
 
 var g_player = null
 
+# For tabbing commands :D
+var prev_com = ""
+var entered_latters = ""
+var prev_entered_latters = ""
+var text_changed_by_player = true
+var found_commands_list = []
+var is_tab_pressed = false
+
 func _ready():
 	# Allow selecting console text
 	console_text.set_selection_enabled(true)
@@ -104,50 +112,54 @@ func _input(event):
 		if (cmd_history_up > 0 and cmd_history_up <= cmd_history.size()):
 			cmd_history_up-=1
 			$LineEdit.set_text(cmd_history[cmd_history_up])
-
 	if Input.is_action_just_pressed("console_down"):
 		if (cmd_history_up > -1 and cmd_history_up + 1 < cmd_history.size()):
 			cmd_history_up +=1
 			$LineEdit.set_text(cmd_history[cmd_history_up])
-
-	if $LineEdit.get_text() != "" and $LineEdit.has_focus() and Input.is_key_pressed(KEY_TAB):
+	
+	if is_tab_pressed:
+		is_tab_pressed = Input.is_key_pressed(KEY_TAB)
+	if $LineEdit.get_text() != "" and $LineEdit.has_focus() and Input.is_key_pressed(KEY_TAB) and not is_tab_pressed:
 		complete()
-
-var prev_com = ""
+		is_tab_pressed = true
 
 func complete():
-	var text = $LineEdit.get_text()
+	var text = entered_latters
 	var last_match = ""
-	var commands_list = []
-	# If there are no matches found yet, try to complete for a command or cvar
-	for command in commands:
-		if command.begins_with(text):
-			describe_command(command)
-			last_match = command + " "
-			commands_list.append(command)
-	for cvar in cvars:
-		if cvar.begins_with(text):
-			describe_cvar(cvar)
-			last_match = cvar + " "
-			commands_list.append(cvar)
 	
+	if prev_entered_latters != entered_latters or found_commands_list.empty():
+		found_commands_list = []
+		# If there are no matches found yet, try to complete for a command or cvar
+		for command in commands:
+			if command.begins_with(text):
+				describe_command(command)
+				last_match = command
+				found_commands_list.append(command)
+		for cvar in cvars:
+			if cvar.begins_with(text):
+				describe_cvar(cvar)
+				last_match = cvar
+				found_commands_list.append(cvar)
 	
-		"""
-	var idx = -1#commands_list.find(prev_com)
-	if prev_com != "" and idx != -1:
-		pass
+	if found_commands_list.size()>0 and prev_com == "":
+		prev_com = found_commands_list[0]
+	var idx = found_commands_list.find(prev_com)
+	print(idx, " ",prev_entered_latters," ", entered_latters," ", prev_com, " ", last_match)
+	if idx != -1:
 		idx += 1
-		if idx >= commands_list.size():
+		if idx >= found_commands_list.size():
 			idx = 0
-		prev_com = commands_list[idx]
-		$LineEdit.text = prev_com
-		$LineEdit.set_cursor_position(prev_com.length())
+		prev_com = found_commands_list[idx]
 	else:
-		"""
-	if commands_list.size() == 1:
 		prev_com = last_match
-		$LineEdit.text = prev_com
-		$LineEdit.set_cursor_position(prev_com.length())
+	
+	if prev_com != "":
+		# text_changed_by_player needs for not changing other vals by signal "text_changed"
+		text_changed_by_player = false
+		$LineEdit.text = prev_com + " "
+		text_changed_by_player = true
+		$LineEdit.set_cursor_position(prev_com.length()+1)
+	prev_entered_latters = entered_latters
 
 # This function is called from scripts/console_commands.gd to avoid the
 # "Cannot access self without instance." error
@@ -182,6 +194,11 @@ func is_console_opened():
 			return 2
 	return 0
 
+# Called when player change text
+func _on_LineEdit_text_changed(text):
+	if text_changed_by_player:
+		entered_latters = text
+
 # Called when the user presses Enter in the console
 func _on_LineEdit_text_entered(text):
 	# used to manage cmd history
@@ -193,7 +210,7 @@ func _on_LineEdit_text_entered(text):
 		cmd_history.append(text)
 		cmd_history_count+=1
 	cmd_history_up = cmd_history_count
-	var text_splitted = (text+" ").split(" ", false)
+	var text_splitted = text.split(" ", false)
 	# Don't do anything if the LineEdit contains only spaces
 	if not text.empty() and text_splitted[0]:
 		handle_command(text)
@@ -308,7 +325,7 @@ func handle_command(text):
 				cvar.value = clamp(float(cmd[1]),float(cvar.min_value),float(cvar.max_value))
 			elif cvar.type == TYPE_BOOL:
 				print(cmd[1])
-				if cmd[1] == "True" or cmd[1] == "true" or int(cmd[1])>0:
+				if cmd[1].to_lower() == "true" or int(cmd[1])>0:
 					cvar.value = true
 				else:
 					cvar.value = false
