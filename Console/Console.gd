@@ -1,7 +1,7 @@
 # Godot Console main script
 # Copyright (c) 2016 Hugo Locurcio and contributors - MIT license
 
-extends Node2D
+extends CanvasLayer
 const Argument = preload('Argument.gd')
 const BaseCommands = preload('BaseCommands.gd')
 
@@ -43,28 +43,23 @@ func _ready():
 
 	set_process_input(true)
 
-	get_viewport().connect("size_changed", self, "_window_rect_changed")
 	animation_player.connect("animation_finished", self, "_on_AnimationPlayer_finished")
 	console_line.connect("text_changed", self, "_on_LineEdit_text_changed")
 	console_line.connect("text_entered", self, "_on_LineEdit_text_entered")
-	_window_rect_changed()
 
 	animation_player.set_current_animation("fade")
 	# HIDE CONSOLE OM START ^_^
 	set_console_opened(true)
-	hide()
+	console_box.hide()
 	# By default we show help
-	append_bbcode("Welcome in Godot Engine ")
-	version(false)
-	append_bbcode(" console\nProject: " + ProjectSettings.get_setting("application/config/name") +  " \nType [color=yellow]cmdlist[/color] to get a list of all commands avaliables\n[color=green]===[/color]\n")
+	var v = Engine.get_version_info()
+	append_bbcode(\
+	 "Welcome in Godot Engine " + str(v.major) + '.' + str(v.minor) + '.' + str(v.patch) + ' ' + v.status+" console"\
+	+"\nProject: " + ProjectSettings.get_setting("application/config/name")\
+	+"\nType [color=yellow]cmdlist[/color] to get a list of all commands avaliables\n[color=green]===[/color]\n")
 
 	# Register built-in commands
 	BaseCommands.new()
-
-func _window_rect_changed():
-	var size = get_viewport().get_visible_rect().size
-	size.y = console_box.rect_size.y
-	console_box.rect_size = size
 
 func _input(event):
 	if Input.is_action_just_pressed("console_toggle"):
@@ -138,14 +133,14 @@ func set_console_opened(opened):
 	# Open the console
 	elif opened == false:
 		animation_player.play_backwards("fade")
-		show()
+		console_box.show()
 		console_line.grab_focus()
 		console_line.clear()
 
 # This signal handles the hiding of the console at the end of the fade-out animation
 func _on_AnimationPlayer_finished(anim):
 	if is_console_opened():
-		hide()
+		console_box.hide()
 
 # Is the console fully opened?
 func is_console_opened():
