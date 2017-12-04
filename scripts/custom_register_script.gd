@@ -8,6 +8,11 @@ var pb_value setget set_pb_value, get_pb_value
 var cb_checked setget set_cb_checked, get_cb_checked
 
 
+var label_text setget set_label_text, get_label_text
+var pb_value setget set_pb_value, get_pb_value
+var cb_checked setget set_cb_checked, get_cb_checked
+
+
 func _ready():
 
 	# Register custom cvar
