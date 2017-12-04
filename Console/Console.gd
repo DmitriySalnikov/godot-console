@@ -1,9 +1,12 @@
 # Godot Console main script
 # Copyright (c) 2016 Hugo Locurcio and contributors - MIT license
 
-extends Panel
+extends Node2D
 
-onready var console_text = $ConsoleText
+onready var console_box = $ConsoleBox
+onready var console_text = $ConsoleBox/ConsoleText
+onready var console_line = $ConsoleBox/LineEdit
+onready var animation_player = $ConsoleBox/AnimationPlayer
 # Those are the scripts containing command and cvar code
 var cmd_history = []
 var cmd_history_count = 0
@@ -29,11 +32,17 @@ func _ready():
 	# Follow console output (for scrolling)
 	console_text.set_scroll_follow(true)
 	# Don't allow focusing on the console text itself
-	console_text.set_focus_mode(FOCUS_NONE)
+	console_text.set_focus_mode(Control.FOCUS_NONE)
 
 	set_process_input(true)
 	
-	$AnimationPlayer.set_current_animation("fade")
+	get_viewport().connect("size_changed", self, "_window_rect_changed")
+	animation_player.connect("animation_finished", self, "_on_AnimationPlayer_finished")
+	console_line.connect("text_changed", self, "_on_LineEdit_text_changed")
+	console_line.connect("text_entered", self, "_on_LineEdit_text_entered")
+	_window_rect_changed()
+	
+	animation_player.set_current_animation("fade")
 	# HIDE CONSOLE OM START ^_^
 	set_console_opened(true)
 	hide()
@@ -100,6 +109,10 @@ func _ready():
 		target = self
 	})
 
+func _window_rect_changed():
+	var size = get_viewport().get_visible_rect().size
+	size.y = console_box.rect_size.y
+	console_box.rect_size = size
 
 func _input(event):
 	if Input.is_action_just_pressed("console_toggle"):
@@ -111,15 +124,15 @@ func _input(event):
 	if Input.is_action_just_pressed("console_up"):
 		if (cmd_history_up > 0 and cmd_history_up <= cmd_history.size()):
 			cmd_history_up-=1
-			$LineEdit.set_text(cmd_history[cmd_history_up])
+			console_line.set_text(cmd_history[cmd_history_up])
 	if Input.is_action_just_pressed("console_down"):
 		if (cmd_history_up > -1 and cmd_history_up + 1 < cmd_history.size()):
 			cmd_history_up +=1
-			$LineEdit.set_text(cmd_history[cmd_history_up])
+			console_line.set_text(cmd_history[cmd_history_up])
 	
 	if is_tab_pressed:
 		is_tab_pressed = Input.is_key_pressed(KEY_TAB)
-	if $LineEdit.get_text() != "" and $LineEdit.has_focus() and Input.is_key_pressed(KEY_TAB) and not is_tab_pressed:
+	if console_line.get_text() != "" and console_line.has_focus() and Input.is_key_pressed(KEY_TAB) and not is_tab_pressed:
 		complete()
 		is_tab_pressed = true
 
@@ -155,9 +168,9 @@ func complete():
 	if prev_com != "":
 		# text_changed_by_player needs for not changing other vals by signal "text_changed"
 		text_changed_by_player = false
-		$LineEdit.text = prev_com + " "
+		console_line.text = prev_com + " "
 		text_changed_by_player = true
-		$LineEdit.set_cursor_position(prev_com.length()+1)
+		console_line.set_cursor_position(prev_com.length()+1)
 	prev_entered_latters = entered_latters
 
 # This function is called from scripts/console_commands.gd to avoid the
@@ -168,26 +181,26 @@ func quit():
 func set_console_opened(opened):
 	# Close the console
 	if opened == true:
-		$AnimationPlayer.play("fade")
+		animation_player.play("fade")
 		# Signal handles the hiding at the end of the animation
 	# Open the console
 	elif opened == false:
-		$AnimationPlayer.play_backwards("fade")
+		animation_player.play_backwards("fade")
 		show()
-		$LineEdit.grab_focus()
-		$LineEdit.clear()
+		console_line.grab_focus()
+		console_line.clear()
 
 # This signal handles the hiding of the console at the end of the fade-out animation
-func _on_AnimationPlayer_finished():
+func _on_AnimationPlayer_finished(anim):
 	if is_console_opened():
 		hide()
 
 # Is the console fully opened?
 func is_console_opened():
-	if $AnimationPlayer.get_current_animation()!="":
-		if $AnimationPlayer.get_current_animation_position() == $AnimationPlayer.get_current_animation_length():
+	if animation_player.get_current_animation()!="":
+		if animation_player.get_current_animation_position() == animation_player.get_current_animation_length():
 			return 1
-		elif $AnimationPlayer.get_current_animation_position() == 0:
+		elif animation_player.get_current_animation_position() == 0:
 			return 0
 		else:
 			return 2
@@ -215,7 +228,7 @@ func _on_LineEdit_text_entered(text):
 		handle_command(text)
 	else:
 		# Clear the LineEdit but do nothing
-		$LineEdit.clear()
+		console_line.clear()
 
 # Registers a new command
 func register_command(name, args):
@@ -335,7 +348,7 @@ func handle_command(text):
 		# Treat unknown commands as unknown
 		append_bbcode("[b]> " + text + "[/b]\n")
 		append_bbcode("[i][color=#ff8888]Unknown command or cvar: " + cmd[0] + "[/color][/i]\n")
-	$LineEdit.clear()
+	console_line.clear()
 
 #######################################################################
 ##################_____STANDART_COMMMAND_LIST_____#####################
