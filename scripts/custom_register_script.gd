@@ -1,7 +1,5 @@
 
 extends Node
-const Range = preload('res://Console/Types/Range.gd')
-const WhiteList = preload('res://Console/Types/WhiteList.gd')
 
 
 var label_text setget set_label_text, get_label_text
@@ -27,7 +25,7 @@ func _ready():
 	# Register custom cvar
 	Console.register_cvar("pb_value", {
 		description = "The level of progress bar",
-		arg = ['value', Range.new(0, 100)],
+		arg = ['value', Console.Range.new(0, 100)],
 		target = self
 	})
 
@@ -46,7 +44,7 @@ func _ready():
 
 	Console.register_command("filter_method", {
 		description = "Filter with whitelist",
-		args = [["filter", WhiteList.new(['hello', 'world'])]],
+		args = [["filter", Console.WhiteList.new(['hello', 'world'])]],
 		target = self
 	})
 
