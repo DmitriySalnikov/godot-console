@@ -1,16 +1,6 @@
 
-extends Object
+extends 'IArgument.gd'
 const Types = preload('Types/Types.gd')
-
-
-# @var  string
-var name
-# @var  Type
-var type setget _set_protected
-# @var  Variant
-var value = null setget set_value
-# @var  Type.t
-var default
 
 
 # @param  string  _name
@@ -29,11 +19,12 @@ func _init(_name, _type, _default = null):
 
 # @param  Variant  _value
 func set_value(_value):  # int
-	if type.check(_value):
+	var set_check = type.check(_value)
+	if set_check == OK:
 		value = type.get()
 		return OK
 
-	return FAILED
+	return set_check
 
 
 # Should be ?static? or should be placed in another class...
@@ -49,7 +40,3 @@ static func to_string(args):  # string
 			result += ' '
 
 	return result
-
-
-func _set_protected(value):
-	pass
