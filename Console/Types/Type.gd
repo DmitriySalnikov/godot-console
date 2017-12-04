@@ -2,7 +2,7 @@
 extends Object
 
 
-var TYPES = {
+var BASE_TYPES = {
   '1': 'Bool',
   '2': 'Int',
   '3': 'Float',
@@ -18,7 +18,8 @@ var t setget _set_protected
 
 # @param  int  _type
 func _init(_type):
-  name = TYPES[str(_type)]
+  if BASE_TYPES.has(str(_type)):
+    name = TYPES[str(_type)]
   t = _type
 
 

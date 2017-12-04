@@ -1,6 +1,6 @@
 
 extends Object
-const Type = preload('Type.gd')
+const Type = preload('Types/Type.gd')
 
 
 # @var  string
