@@ -3,18 +3,22 @@
 
 extends Node2D
 const Argument = preload('Argument.gd')
+const BaseCommands = preload('BaseCommands.gd')
 
 
 onready var console_box = $ConsoleBox
 onready var console_text = $ConsoleBox/ConsoleText
 onready var console_line = $ConsoleBox/LineEdit
 onready var animation_player = $ConsoleBox/AnimationPlayer
+
 # Those are the scripts containing command and cvar code
 var cmd_history = []
 var cmd_history_count = 0
 var cmd_history_up = 0
+
 # All recognized commands
 var commands = {}
+
 # All recognized cvars
 var cvars = {}
 
@@ -55,63 +59,7 @@ func _ready():
 	append_bbcode(" console\nProject: " + ProjectSettings.get_setting("application/config/name") +  " \nType [color=yellow]cmdlist[/color] to get a list of all commands avaliables\n[color=green]===[/color]\n")
 
 	# Register built-in commands
-	register_command("echo", {
-		description = "Prints a string in console",
-		args = [['message', TYPE_STRING]],
-		target = self
-	})
-
-	register_command("history", {
-		description = "Print all previous cmd used during the session",
-		args = [],
-		target = self
-	})
-
-	register_command("cmdlist", {
-		description = "Lists all available commands",
-		args = [],
-		target = self
-	})
-
-	register_command("cvarlist", {
-		description = "Lists all available cvars",
-		args = [],
-		target = self
-	})
-
-	register_command("help", {
-		description = "Outputs usage instructions",
-		args = [],
-		target = self
-	})
-
-	register_command("quit", {
-		description = "Exits the application",
-		args = [],
-		target = self
-	})
-
-	register_command("clear", {
-		description = "clear the terminal",
-		args = [],
-		target = self
-	})
-
-	register_command("version", {
-		description = "clear the terminal",
-		args = [['show_full', TYPE_BOOL]],
-		target = self
-	})
-
-	# Register built-in cvars
-	register_cvar("client_max_fps", {
-		description = "The maximal framerate at which the application can run",
-		type = TYPE_INT,
-		default_value = 61,
-		min_value = 10,
-		max_value = 1000,
-		target = self
-	})
+	BaseCommands.new()
 
 func _window_rect_changed():
 	var size = get_viewport().get_visible_rect().size
@@ -236,7 +184,7 @@ func _on_LineEdit_text_entered(text):
 
 # Registers a new command
 func register_command(name, args):
-	if args.has("target") and args.target != null and args.has("description") and args.has("args"):
+	if args.has("target") and args.target != null and args.has("args"):
 		if args.target.has_method(name):
 			var argsl = []
 			for arg in args.args:
@@ -246,25 +194,19 @@ func register_command(name, args):
 
 			commands[name] = args
 		else:
-			print("Failed adding command ", name, ". The target has no this function!")
+			echo("[color=#ff8888][ERROR][/color] Failed adding command " + name + ". The target has no such function!")
 	else:
-		print("Failed adding command ", name, ". Invalid arguments!")
+		echo("[color=#ff8888][ERROR][/color] Failed adding command " + name + ". Invalid arguments!")
 
 # Registers a new cvar (control variable)
 func register_cvar(name, args):
-	if args.has("target") and args.target != null and args.has("description") and args.has("type") and args.has("default_value"):
-		if args.type != TYPE_STRING and args.type != TYPE_BOOL:
-			if not args.has("min_value") and not args.has("max_value"):
-				print("Failed adding command ", name, ". The numeric parameter should have min_value and max_value arguments")
-				return
-
-		if args.target.has_method(name):
+	if args.has("target") and args.target != null and args.has("type"):
+		if args.target.get(name) != null:
 			cvars[name] = args
-			cvars[name].value = cvars[name].default_value
 		else:
-			print("Failed adding command ", name, ". The target has no this function!")
+			echo("[color=#ff8888][ERROR][/color] Failed adding variable " + name + ". The target has no such variable!")
 	else:
-		print("Failed adding command ", name, ". Invalid arguments!")
+		echo("[color=#ff8888][ERROR][/color] Failed adding variable " + name + ". Invalid arguments!")
 
 func append_bbcode(bbcode):
 	console_text.set_bbcode(console_text.get_bbcode() + bbcode)
@@ -284,7 +226,6 @@ func clear():
 # Describes a command, user by the "cmdlist" command and when the user enters a command name without any arguments (if it requires at least 1 argument)
 func describe_command(cmd):
 	var command = commands[cmd]
-	var description = command.description
 	var args = Argument.to_string(command.args)
 
 	append_bbcode("[color=#ffff66]" + cmd + "[/color]")
@@ -292,21 +233,30 @@ func describe_command(cmd):
 	if command.args.size() >= 1:
 		append_bbcode(" [color=#88ffff]" + args + "[/color]")
 
-	append_bbcode(' - ' + description + "\n")
+	if (command.has('description')):
+		append_bbcode(' - ' + command.description)
+
+	append_bbcode("\n")
 
 # Describes a cvar, used by the "cvarlist" command and when the user enters a cvar name without any arguments
 func describe_cvar(cvar):
 	var cvariable = cvars[cvar]
-	var description = cvariable.description
 	var type = cvariable.type
-	var default_value = cvariable.default_value
-	var value = cvariable.value
+	var value = cvariable.target.get(cvar)
+
+	append_bbcode("[color=#88ff88]" + cvar + ":[/color] [color=#9999ff]\"" + str(value) + "\"[/color] ")
+
+	if cvariable.has('description'):
+		append_bbcode(cvariable.description + ' ')
+
 	if type == TYPE_STRING or type == TYPE_BOOL:
-		append_bbcode("[color=#88ff88]" + str(cvar) + ":[/color] [color=#9999ff]\"" + str(value) + "\"[/color]  " + str(description) + " [color=#ff88ff](default: \"" + str(default_value) + "\")[/color]\n")
+		append_bbcode("[color=#ff88ff](default: " + ")[/color] ")
 	else:
 		var min_value = cvariable.min_value
 		var max_value = cvariable.max_value
-		append_bbcode("[color=#88ff88]" + str(cvar) + ":[/color] [color=#9999ff]" + str(value) + "[/color]  " + str(description) + " [color=#ff88ff](" + str(min_value) + ".." + str(max_value) + ", default: " + str(default_value) + ")[/color]\n")
+		append_bbcode("[color=#ff88ff](" + str(min_value) + ".." + str(max_value) + ", default: " + ")[/color]")
+
+	append_bbcode("\n")
 
 func handle_command(text):
 	# The current console text, splitted by spaces (for arguments)
@@ -365,7 +315,7 @@ func handle_command(text):
 					cvar.value = false
 
 			# Call setter code
-			cvar.target.callv(cmd[0], [cvar.value])
+			cvar.target.set(cmd[0], cvar.value)
 	else:
 		# Treat unknown commands as unknown
 		append_bbcode("[b]> " + text + "[/b]\n")

@@ -1,4 +1,10 @@
+
 extends Node
+
+
+var label_text setget set_label_text, get_label_text
+var pb_value setget set_pb_value, get_pb_value
+var cb_checked setget set_cb_checked, get_cb_checked
 
 
 func _ready():
@@ -7,7 +13,6 @@ func _ready():
 	Console.register_cvar("label_text", {
 		description = "The text of example label",
 		type = TYPE_STRING,
-		default_value = "",
 		target = self
 	})
 
@@ -41,19 +46,32 @@ func _ready():
 		target = self
 	})
 
-func label_text(text):
+func set_label_text(text):
 	$ExampleLabel.text = text
+
+func get_label_text():
+	return $ExampleLabel.text
+
 
 func change_label_text(cond, text):
 	if cond:
 		$ExampleLabel.text = text
 
-func pb_value(val):
+
+func set_pb_value(val):
 	$ProgressBar.value = int(val)
+
+func get_pb_value():
+	return $ProgressBar.value
+
 
 func play_anim(speed):
 	$AnimationPlayer.play("test")
 	$AnimationPlayer.set_speed_scale(float(speed))
 
-func cb_checked(val):
+
+func set_cb_checked(val):
 	$CheckBox.pressed = val
+
+func get_cb_checked():
+	return $CheckBox.pressed
