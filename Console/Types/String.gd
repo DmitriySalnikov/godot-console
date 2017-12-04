@@ -3,25 +3,25 @@ extends 'BaseType.gd'
 
 
 func _init():
-  name = 'String'
-  t = TYPE_STRING
+	name = 'String'
+	t = TYPE_STRING
 
 
-# @param  Varian  _value
-func check(_value):  # bool
-  var r = RegEx.new()
-  r.compile('^\\w+$')
+# @param	Varian	_value
+func check(_value):	# bool
+	var r = RegEx.new()
+	r.compile('^\\w+$')
 
-  rematch = r.search(_value)
+	rematch = r.search(_value)
 
-  if rematch:
-    return true
+	if rematch:
+		return true
 
-  return false
+	return false
 
 
-func get():  # string
-  if rematch and rematch is RegExMatch:
-    return str(rematch.get_string())
+func get():	# string
+	if rematch and rematch is RegExMatch:
+		return str(rematch.get_string())
 
-  return ""
+	return ""

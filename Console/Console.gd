@@ -200,8 +200,9 @@ func register_command(name, args):
 
 # Registers a new cvar (control variable)
 func register_cvar(name, args):
-	if args.has("target") and args.target != null and args.has("type"):
+	if args.has("target") and args.target != null and args.has("arg"):
 		if args.target.get(name) != null:
+			args.arg = Argument.new(args.arg[0], args.arg[1])
 			cvars[name] = args
 		else:
 			echo("[color=#ff8888][ERROR][/color] Failed adding variable " + name + ". The target has no such variable!")
@@ -241,22 +242,15 @@ func describe_command(cmd):
 # Describes a cvar, used by the "cvarlist" command and when the user enters a cvar name without any arguments
 func describe_cvar(cvar):
 	var cvariable = cvars[cvar]
-	var type = cvariable.type
+	var arg = Argument.to_string([cvariable.arg])
 	var value = cvariable.target.get(cvar)
 
-	append_bbcode("[color=#88ff88]" + cvar + ":[/color] [color=#9999ff]\"" + str(value) + "\"[/color] ")
+	append_bbcode('[color=#88ff88]' + cvar + '[/color] [color=#88ffff]' + arg + '[/color]')
 
 	if cvariable.has('description'):
-		append_bbcode(cvariable.description + ' ')
+		append_bbcode(' - ' + cvariable.description)
 
-	if type == TYPE_STRING or type == TYPE_BOOL:
-		append_bbcode("[color=#ff88ff](default: " + ")[/color] ")
-	else:
-		var min_value = cvariable.min_value
-		var max_value = cvariable.max_value
-		append_bbcode("[color=#ff88ff](" + str(min_value) + ".." + str(max_value) + ", default: " + ")[/color]")
-
-	append_bbcode("\n")
+	append_bbcode(' ([color=#ff88ff]' + str(value) + '[/color])\n')
 
 func handle_command(text):
 	# The current console text, splitted by spaces (for arguments)
@@ -290,32 +284,16 @@ func handle_command(text):
 	elif cvars.has(cmd[0]):
 		var cvar = cvars[cmd[0]]
 		print("> " + text)
-		append_bbcode("[b]> " + text + "[/b]\n")
+		append_bbcode("\n[b]> " + text + "[/b]\n")
 		# Check target script argument
 		# If no argument is supplied, then show cvar description and usage
 		if cmd.size() == 1:
 			describe_cvar(cmd[0])
 		else:
-			# Let the cvar change values!
-			if cvar.type == TYPE_STRING:
-				for word in range(1, cmd.size()):
-					if word == 1:
-						cvar.value = str(cmd[word])
-					else:
-						cvar.value += str(" " + cmd[word])
-			elif cvar.type == TYPE_INT:
-				cvar.value = clamp(int(cmd[1]),int(cvar.min_value),int(cvar.max_value))
-			elif cvar.type == TYPE_REAL:
-				cvar.value = clamp(float(cmd[1]),float(cvar.min_value),float(cvar.max_value))
-			elif cvar.type == TYPE_BOOL:
-				print(cmd[1])
-				if cmd[1].to_lower() == "true" or int(cmd[1])>0:
-					cvar.value = true
-				else:
-					cvar.value = false
+			cvar.arg.set_value(cmd[1])
 
 			# Call setter code
-			cvar.target.set(cmd[0], cvar.value)
+			cvar.target.set(cmd[0], cvar.arg.value)
 	else:
 		# Treat unknown commands as unknown
 		append_bbcode("[b]> " + text + "[/b]\n")
@@ -328,7 +306,7 @@ func handle_command(text):
 func echo(text):
 	# Erase "echo" from the output
 	#text.erase(0, 5)
-	append_bbcode(text + "\n")
+	append_bbcode(str(text) + "\n")
 	print(text)
 
 # Lists all available commands
@@ -351,10 +329,6 @@ func help():
 	var help_text = """Type [color=#ffff66]cmdlist[/color] to get a list of commands.
 Type [color=#ffff66]quit[/color] to exit the application."""
 	Console.append_bbcode(help_text + "\n")
-
-func client_max_fps(value):
-	Engine.set_target_fps(int(value))
-
 
 func version(full = false):
 	var v = Engine.get_version_info()
