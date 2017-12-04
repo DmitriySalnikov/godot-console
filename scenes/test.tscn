@@ -39,15 +39,16 @@ anchor_left = 0.0
 anchor_top = 0.0
 anchor_right = 1.0
 anchor_bottom = 0.0
-margin_top = 380.0
-margin_bottom = 399.0
+margin_top = 335.0
+margin_bottom = 398.0
 rect_pivot_offset = Vector2( 0, 0 )
 rect_clip_content = false
 mouse_filter = 2
 size_flags_horizontal = 1
 size_flags_vertical = 4
 custom_fonts/font = SubResource( 1 )
-text = "I am an example label! Modify me by typing \"label_text <text>\" in the console."
+text = "I am an example label! Modify me by typing \"label_text <text>\" in the console.
+Press ` to open console"
 align = 1
 valign = 1
 percent_visible = 1.0
@@ -114,7 +115,7 @@ align = 0
 
 [node name="icon" type="Sprite" parent="."]
 
-position = Vector2( 473, 76 )
+position = Vector2( 502, 178 )
 texture = ExtResource( 3 )
 
 

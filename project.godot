@@ -10,7 +10,7 @@ config_version=3
 
 [application]
 
-config/name="GodotConsole 3.0"
+config/name="In-game Debug Console"
 run/main_scene="res://scenes/test.tscn"
 config/icon="res://icon.png"
 
