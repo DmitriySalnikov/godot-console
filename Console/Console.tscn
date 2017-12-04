@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=2]
+[gd_scene load_steps=15 format=2]
 
 [ext_resource path="res://Console/Console.gd" type="Script" id=1]
 [ext_resource path="res://Console/Fonts/roboto_mono_bold_italic.ttf" type="DynamicFontData" id=2]
@@ -12,7 +12,7 @@ length = 0.25
 loop = false
 step = 0.05
 tracks/0/type = "method"
-tracks/0/path = NodePath("LineEdit")
+tracks/0/path = NodePath("Container/LineEdit")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/imported = false
@@ -38,6 +38,20 @@ tracks/1/keys = {
 "update": 0,
 "values": [ Color( 1, 1, 1, 1 ), Color( 1, 1, 1, 0 ) ]
 }
+
+[sub_resource type="StyleBoxEmpty" id=8]
+
+content_margin_left = -1.0
+content_margin_right = -1.0
+content_margin_top = -1.0
+content_margin_bottom = -1.0
+
+[sub_resource type="StyleBoxEmpty" id=9]
+
+content_margin_left = -1.0
+content_margin_right = -1.0
+content_margin_top = -1.0
+content_margin_bottom = -1.0
 
 [sub_resource type="DynamicFont" id=2]
 
@@ -134,17 +148,34 @@ playback/speed = 1.0
 blend_times = [  ]
 autoplay = ""
 
-[node name="ConsoleText" type="RichTextLabel" parent="ConsoleBox"]
+[node name="Container" type="VBoxContainer" parent="ConsoleBox"]
 
 anchor_left = 0.0
 anchor_top = 0.0
 anchor_right = 1.0
-anchor_bottom = 0.91667
-margin_bottom = -2.00104
+anchor_bottom = 1.0
+margin_left = 80.0
 rect_pivot_offset = Vector2( 0, 0 )
-mouse_filter = 0
+rect_clip_content = false
+mouse_filter = 1
 size_flags_horizontal = 1
 size_flags_vertical = 1
+alignment = 0
+
+[node name="ConsoleText" type="RichTextLabel" parent="ConsoleBox/Container"]
+
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_right = 944.0
+margin_bottom = 267.0
+rect_pivot_offset = Vector2( 0, 0 )
+mouse_filter = 0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+custom_styles/focus = SubResource( 8 )
+custom_styles/normal = SubResource( 9 )
 custom_fonts/bold_italics_font = SubResource( 2 )
 custom_fonts/italics_font = SubResource( 3 )
 custom_fonts/bold_font = SubResource( 4 )
@@ -156,18 +187,19 @@ visible_characters = -1
 percent_visible = 1.0
 override_selected_font_color = false
 
-[node name="LineEdit" type="LineEdit" parent="ConsoleBox"]
+[node name="LineEdit" type="LineEdit" parent="ConsoleBox/Container"]
 
 anchor_left = 0.0
-anchor_top = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-margin_top = -26.0
-margin_bottom = 3.0
+anchor_top = 0.0
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_top = 271.0
+margin_right = 944.0
+margin_bottom = 300.0
 rect_pivot_offset = Vector2( 0, 0 )
 rect_clip_content = false
 mouse_filter = 0
-size_flags_horizontal = 1
+size_flags_horizontal = 3
 size_flags_vertical = 1
 custom_styles/focus = SubResource( 6 )
 custom_fonts/font = SubResource( 7 )

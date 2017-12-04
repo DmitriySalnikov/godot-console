@@ -13,8 +13,8 @@ const WhiteList = preload('Types/WhiteList.gd')
 
 
 onready var console_box = $ConsoleBox
-onready var console_text = $ConsoleBox/ConsoleText
-onready var console_line = $ConsoleBox/LineEdit
+onready var console_text = $ConsoleBox/Container/ConsoleText
+onready var console_line = $ConsoleBox/Container/LineEdit
 onready var animation_player = $ConsoleBox/AnimationPlayer
 
 # Those are the scripts containing command and cvar code
@@ -44,8 +44,8 @@ func _ready():
 	console_text.set_selection_enabled(true)
 	# Follow console output (for scrolling)
 	console_text.set_scroll_follow(true)
-	# Don't allow focusing on the console text itself
-	console_text.set_focus_mode(Control.FOCUS_NONE)
+	# Don't allow(or not..) focusing on the console text itself
+	#console_text.set_focus_mode(Control.FOCUS_NONE)
 
 	set_process_input(true)
 
