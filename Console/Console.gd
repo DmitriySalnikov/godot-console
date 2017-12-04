@@ -273,7 +273,7 @@ func handle_command(text):
 			if arg_status == OK:
 				args.append(command.args[i - 1].value)
 			else:
-				echo("Some error that sais that method param number " + str(i) + " has different type")
+				append_bbcode("[i][color=#ff8888]Some error that sais that method param number " + str(i) + " has different type[/color][/i]\n")
 				return
 
 		print("> " + text)
@@ -359,6 +359,6 @@ func client_max_fps(value):
 func version(full = false):
 	var v = Engine.get_version_info()
 	if full:
-		append_bbcode(str(v))
+		append_bbcode(str(v)+"\n")
 	else:
-		append_bbcode(str(v.major) + '.' + str(v.minor) + '.' + str(v.patch) + ' ' + v.status)
+		append_bbcode(str(v.major) + '.' + str(v.minor) + '.' + str(v.patch) + ' ' + v.status+"\n")
