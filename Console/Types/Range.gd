@@ -24,7 +24,7 @@ func check(_value):	# bool
 
 	rematch = r.search(_value)
 
-	if rematch:
+	if rematch and rematch is RegExMatch:
 		return true
 
 	return false
