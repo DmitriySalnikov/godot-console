@@ -296,7 +296,7 @@ func handle_command(text):
 			if arg_status == OK:
 				args.append(command.args[i - 1].value)
 			elif arg_status == FAILED:
-				append_bbcode("[color=#ff8888][ERROR][/color] Expected " + command.args[i - 1].type.name + " at position " + str(i) + "\n")
+				append_bbcode("[color=#ff8888][ERROR][/color] Method " + cmd[0] + " expected " + command.args[i - 1].type.name + " at position " + str(i) + "\n")
 
 		print("> " + text)
 		append_bbcode("[b]> " + text + "[/b]\n")
@@ -312,7 +312,7 @@ func handle_command(text):
 	elif cvars.has(cmd[0]):
 		var cvar = cvars[cmd[0]]
 		print("> " + text)
-		append_bbcode("\n[b]> " + text + "[/b]\n")
+		append_bbcode("[b]> " + text + "[/b]\n")
 		# Check target script argument
 		# If no argument is supplied, then show cvar description and usage
 		if cmd.size() == 1:
