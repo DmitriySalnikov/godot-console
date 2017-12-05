@@ -38,7 +38,7 @@ func _ready():
 
 	Console.register_command("play_anim", {
 		description = "Start playing animation on test scene with specific speed",
-		args = [["speed", TYPE_INT]],
+		args = [["speed", TYPE_REAL]],
 		target = self
 	})
 
@@ -69,7 +69,7 @@ func get_pb_value():
 
 func play_anim(speed):
 	$AnimationPlayer.play("test")
-	$AnimationPlayer.set_speed_scale(float(speed))
+	$AnimationPlayer.set_speed_scale(speed)
 
 
 func set_cb_checked(val):
