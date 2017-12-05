@@ -3,7 +3,7 @@ Godot Console
 
 A **work-in-progress** Quake-style console for Godot. Requires a Godot 3.0.
 
-![Preview](https://lut.im/z7lquRdc5n/IRrUJuiJdUUuWfuO.png)
+![Preview](https://github.com/DmitriySalnikov/godot-console/blob/master/screenshot_3.png)
 
 ## Features
 
