@@ -12,7 +12,7 @@ func _ready():
 	# Register custom cvar
 	Console.register_cvar("label_text", {
 		description = "The text of example label",
-		arg = ['text', TYPE_STRING],
+		arg = 'text',
 		target = self
 	})
 
@@ -32,7 +32,7 @@ func _ready():
 	# Register custom cvar
 	Console.register_cvar("cb_checked", {
 		description = "The value of check box",
-		arg = ['checked', TYPE_BOOL],
+		arg = TYPE_BOOL,
 		target = self
 	})
 

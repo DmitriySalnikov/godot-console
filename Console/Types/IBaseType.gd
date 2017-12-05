@@ -10,7 +10,7 @@ var rematch setget _set_protected
 
 
 # @param  Varian  _value
-func check(_value):  # bool
+func check(_value):  # int
 	pass
 
 

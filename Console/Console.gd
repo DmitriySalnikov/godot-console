@@ -200,7 +200,15 @@ func register_command(name, args):
 		if args.target.has_method(name):
 			var argsl = []
 			for arg in args.args:
-				argsl.append(Argument.new(arg[0], arg[1]))
+				if typeof(arg) == TYPE_ARRAY:
+					argsl.append(Argument.new(arg[0], arg[1]))
+				elif typeof(arg) == TYPE_STRING:
+					argsl.append(Argument.new(arg))
+				elif typeof(arg) == TYPE_INT or typeof(args.arg) == TYPE_OBJECT:
+					argsl.append(Argument.new(null, arg))
+				else:
+					echo("[color=#ff8888][ERROR][/color] Failed adding command " + name + ". Invalid arguments!")
+					return
 
 			args.args = argsl
 
@@ -214,7 +222,16 @@ func register_command(name, args):
 func register_cvar(name, args):
 	if args.has("target") and args.target != null and args.has("arg"):
 		if args.target.get(name) != null:
-			args.arg = Argument.new(args.arg[0], args.arg[1])
+			if typeof(args.arg) == TYPE_ARRAY:
+				args.arg = Argument.new(args.arg[0], args.arg[1])
+			elif typeof(args.arg) == TYPE_STRING:
+				args.arg = Argument.new(args.arg)
+			elif typeof(args.arg) == TYPE_INT or typeof(args.arg) == TYPE_OBJECT:
+				args.arg = Argument.new(null, args.arg)
+			else:
+				echo("[color=#ff8888][ERROR][/color] Failed adding variable " + name + ". Invalid arguments!")
+				return
+
 			cvars[name] = args
 		else:
 			echo("[color=#ff8888][ERROR][/color] Failed adding variable " + name + ". The target has no such variable!")

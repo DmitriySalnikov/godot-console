@@ -40,13 +40,13 @@ func _init():
 	})
 
 	Console.register_command("clear", {
-		description = "clear the terminal",
+		description = "Clear the terminal",
 		args = [],
 		target = Console
 	})
 
 	Console.register_command("version", {
-		description = "clear the terminal",
+		description = "Shows engine vesion",
 		args = [['show_full', TYPE_BOOL]],
 		target = Console
 	})
@@ -54,7 +54,7 @@ func _init():
 	# Register built-in cvars
 	Console.register_cvar("client_max_fps", {
 		description = "The maximal framerate at which the application can run",
-		arg = ['value', Console.Range.new(10, 1000)],
+		arg = Console.Range.new(10, 1000),
 		target = self
 	})
 

@@ -3,6 +3,7 @@ extends Object
 
 
 const TYPES = {
+	'0': preload('Any.gd'),
 	'1': preload('Bool.gd'),
 	'2': preload('Int.gd'),
 	'3': preload('Float.gd'),

@@ -4,9 +4,9 @@ const Types = preload('Types/Types.gd')
 
 
 # @param  string  _name
-# @param  int|Type  type
+# @param  int|BaseType  type
 # @param  Type.t  _default
-func _init(_name, _type, _default = null):
+func _init(_name = null, _type = 0, _default = null):
 	name = _name
 
 	if typeof(_type) == TYPE_OBJECT:
@@ -34,7 +34,10 @@ static func to_string(args):  # string
 
 	var argsSize = args.size()
 	for i in range(argsSize):
-		result += args[i].name + ':' + args[i].type.name
+		if args[i].name:
+			result += args[i].name + ':'
+
+		result += args[i].type.name
 
 		if i != argsSize - 1:
 			result += ' '
