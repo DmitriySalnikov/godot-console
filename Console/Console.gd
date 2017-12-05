@@ -4,7 +4,7 @@
 extends CanvasLayer
 const Argument = preload('Argument.gd')
 const BaseCommands = preload('BaseCommands.gd')
-onready var RegExLib = preload('Types/RegExLib.gd').new()
+var RegExLib = preload('Types/RegExLib.gd').new()
 
 
 ### Custom console types
@@ -166,9 +166,9 @@ func set_linetext_by_code(string, move_to_end = false):
 	text_changed_by_player = false
 	console_line.set_text(string)
 	text_changed_by_player = true
-	
+
 	if move_to_end:
-			console_line.set_cursor_position(console_line.text.length()+1)
+		console_line.set_cursor_position(console_line.text.length()+1)
 
 # Called when player change text
 func _on_LineEdit_text_changed(text):

@@ -1,5 +1,6 @@
+
 extends Object
-const BaseType = preload('IBaseType.gd')
+
 
 const TYPES = {
 	'1': preload('Bool.gd'),

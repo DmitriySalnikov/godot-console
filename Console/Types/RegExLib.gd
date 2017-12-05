@@ -1,13 +1,29 @@
+
 extends Object
 
-var Bool  = RegEx.new()
-var Float = RegEx.new()
-var Int   = RegEx.new()
-var Str   = RegEx.new()
 
-func _init():
-	Bool.compile('^(1|0|true|false)$')
-	Float.compile('^[+-]?([0-9]*\\.?[0-9]+|[0-9]+\\.?[0-9]*)([eE][+-]?[0-9]+)?$')
-	Int.compile('^\\d+$')
-	Str.compile('^\\w+$')
-	
+const _patterns = {
+	'1': '^(1|0|true|false)$',
+	'2': '^\\d+$',
+	'3': '^[+-]?([0-9]*\\.?[0-9]+|[0-9]+\\.?[0-9]*)([eE][+-]?[0-9]+)?$',
+	'4': '^\\w+$'
+}
+
+# @var  Array<RegEx>
+var _compiled = {}
+
+
+# @param  int  type
+func get(type):  # RegEx|int
+	var str_type = str(type)
+
+	if !_compiled.has(str_type):
+		var r = RegEx.new()
+		r.compile(_patterns[str_type])
+
+		if r and r is RegEx:
+			_compiled[str_type] = r
+		else:
+			return FAILED
+
+	return _compiled[str_type]

@@ -12,19 +12,9 @@ var rmax
 # @param  int|float  _max
 func _init(_min, _max):
 	name = 'Int'
-	t = null
+	t = TYPE_INT
 	rmin = _min
 	rmax = _max
-
-
-# @param  Varian  _value
-func check(_value):  # bool
-	rematch = Console.RegExLib.Int.search(_value)
-
-	if rematch and rematch is RegExMatch:
-		return OK
-
-	return FAILED
 
 
 func get():  # string

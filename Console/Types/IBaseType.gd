@@ -6,7 +6,7 @@ var name setget _set_protected
 # @var  int
 var t setget _set_protected
 # @var  RegExMatch
-var rematch
+var rematch setget _set_protected
 
 
 # @param  Varian  _value

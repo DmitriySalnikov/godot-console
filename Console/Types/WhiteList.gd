@@ -1,6 +1,6 @@
 
 extends 'BaseType.gd'
-const Argument = preload('res://Console/IArgument.gd')
+const IArgument = preload('res://Console/IArgument.gd')
 
 
 # @var  Array<Variant>
@@ -18,12 +18,12 @@ func _init(_allowedItems):
 
 
 # @param  Variant  _value
-func check(_value):  # bool
+func check(_value):  # int
 	if allowedItems.has(_value):
 		value = _value
 		return OK
 
-	return Argument.ARGASSIG.CANCELED
+	return IArgument.ARGASSIG.CANCELED
 
 
 func get():  # Variant
