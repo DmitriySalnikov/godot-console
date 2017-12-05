@@ -204,7 +204,7 @@ func register_command(name, args):
 					argsl.append(Argument.new(arg[0], arg[1]))
 				elif typeof(arg) == TYPE_STRING:
 					argsl.append(Argument.new(arg))
-				elif typeof(arg) == TYPE_INT or typeof(args.arg) == TYPE_OBJECT:
+				elif typeof(arg) == TYPE_INT or typeof(arg) == TYPE_OBJECT:
 					argsl.append(Argument.new(null, arg))
 				else:
 					echo("[color=#ff8888][ERROR][/color] Failed adding command " + name + ". Invalid arguments!")

@@ -13,5 +13,7 @@ const TYPES = {
 
 # @param  int  _type
 static func createT(_type):
-	if (TYPES.has(str(_type))):
-		return TYPES[str(_type)].new()
+	var str_type = str(_type)
+
+	if (TYPES.has(str_type)):
+		return TYPES[str_type].new()

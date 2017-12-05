@@ -11,4 +11,4 @@ func get():  # float
 	if rematch and rematch is RegExMatch:
 		return float(rematch.get_string())
 
-	return 0
+	return 0.0

@@ -3,10 +3,9 @@ extends 'IArgument.gd'
 const Types = preload('Types/Types.gd')
 
 
-# @param  string  _name
-# @param  int|BaseType  type
-# @param  Type.t  _default
-func _init(_name = null, _type = 0, _default = null):
+# @param  string|null  _name
+# @param  int|BaseType  _type
+func _init(_name, _type = 0):
 	name = _name
 
 	if typeof(_type) == TYPE_OBJECT:
@@ -20,14 +19,13 @@ func _init(_name = null, _type = 0, _default = null):
 # @param  Variant  _value
 func set_value(_value):  # int
 	var set_check = type.check(_value)
+
 	if set_check == OK:
 		value = type.get()
-		return OK
 
 	return set_check
 
 
-# Should be ?static? or should be placed in another class...
 # @param  Array<Argument>  args
 static func to_string(args):  # string
 	var result = ''
