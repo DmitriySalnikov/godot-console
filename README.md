@@ -18,8 +18,8 @@ A **work-in-progress** Quake-style console for Godot. Requires a Godot 3.0.
 ## Installation
 
 1. Clone or download this repository
-2. Copy 'Console' folder to any directory of your project
-3. Add 'Console/Console.tscn' to Autoload
+2. Copy `Console` folder to any directory of your project
+3. Add `Console/Console.tscn` to Autoload
 4. Add new actions to Input Map: "console_toggle", "console_up", "console_down"
 
 ## Examples
@@ -46,7 +46,8 @@ Console.register_cvar('variable_name', {
 - 'arg_name' — In this situation type will be set to Any
 - ***ARG_TYPE***
 
-***ARG_TYPE*** must be set to engine `TYPE_*` constant (right now supported types are: `TYPE_BOOL`, `TYPE_INT`, `TYPE_REAL` and `TYPE_STRING`) OR to instance of Console type class (`Console/Types/`)
+***ARG_TYPE*** must be set to engine `TYPE_*` constant (right now supported types are: `TYPE_BOOL`, `TYPE_INT`, `TYPE_REAL` and `TYPE_STRING`) OR to instance of Console type class (`Console/Types/`).
+
 You can find more examples in `scripts/custom_register_script.gd`
 
 ## License
