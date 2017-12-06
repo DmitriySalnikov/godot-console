@@ -9,6 +9,6 @@ func _init():
 
 func get():  # float
 	if rematch and rematch is RegExMatch:
-		return float(rematch.get_string())
+		return float(rematch.get_string().replace(',', '.'))
 
 	return 0.0
