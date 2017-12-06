@@ -13,8 +13,6 @@ func _init(_name, _type = 0):
 	else:
 		type = Types.createT(_type)
 
-	default = _default
-
 
 # @param  Variant  _value
 func set_value(_value):  # int
