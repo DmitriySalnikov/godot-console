@@ -1,6 +1,10 @@
 Godot Console
 ============
 
+[@Krakean](https://github.com/Krakean), thanks for the motivation to improve the original console :)
+
+Also, you can see his [version](https://github.com/Krakean/godot-console).
+
 A **work-in-progress** Quake-style console for Godot. Requires a Godot 3.0.
 
 ![A work-in-progress Quake-style console for Godot. Requires a Godot 3.0.](https://github.com/DmitriySalnikov/godot-console/blob/master/screenshot_3.png)

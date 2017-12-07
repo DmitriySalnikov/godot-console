@@ -3,7 +3,7 @@ extends 'BaseType.gd'
 
 
 # @var  Variant
-var value
+var _value
 
 
 func _init():
@@ -12,10 +12,10 @@ func _init():
 
 
 # @param  Varian  _value
-func check(_value):  # int
-	value = _value
+func check(value):  # int
+	_value = value
 	return OK
 
 
 func get():  # Variant
-	return value
+	return _value

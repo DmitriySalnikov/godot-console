@@ -12,7 +12,7 @@ func _ready():
 	# Register custom cvar
 	Console.register_cvar("label_text", {
 		description = "The text of example label",
-		arg = 'text',
+		arg = ['text', TYPE_STRING],
 		target = self
 	})
 

@@ -2,13 +2,19 @@
 extends 'BaseType.gd'
 
 
+var value
+
+
 func _init():
 	name = 'String'
 	t = TYPE_STRING
 
 
-func get():  # string
-	if rematch and rematch is RegExMatch:
-		return str(rematch.get_string())
+# @param  Varian  _value
+func check(_value):  # int
+	value = _value
+	return OK
 
-	return ""
+
+func get():  # Variant
+	return str(value)

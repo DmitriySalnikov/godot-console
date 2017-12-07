@@ -14,7 +14,7 @@ var name
 # @var  Type
 var type setget _set_protected
 # @var  Variant
-var value = null setget set_value
+var value setget set_value
 # @var  Type.t
 var default
 
