@@ -1,3 +1,5 @@
+***Console is deprecated.***
+
 **If you want more advanced console please visit [QuentinCaffeino](https://github.com/QuentinCaffeino/godot-console) repository.**
 
 Godot Console
